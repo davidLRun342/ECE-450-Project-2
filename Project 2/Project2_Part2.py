@@ -57,7 +57,30 @@ def FFalloc(allMem, Job, blckSize, segment):
             cnt_block =0
             return loc_start
             break
-    
+
+    if cnt_block <= tempSize:
+        print("MEMORY IS FULL or JOB IS TOO BIG TO BE ALLOCATED!!!\n")
+        Memory_IsFull = True
+
+    return loc_start
+
+def NFalloc(allMem, Job, blckSize, segment):
+    cnt_block = 0
+    loc_start = 0
+    global Memory_IsFull
+
+    tempSize = round(Job[segment] / blckSize)
+
+    for loc in range(len(allMem.entireMem)):
+
+        if allMem.entireMem[loc][0] == '':
+            cnt_block += 1
+
+        if cnt_block >= tempSize:
+            loc_start = loc - tempSize + 1
+            return loc_start
+            break
+
     if cnt_block <= tempSize:
         print("MEMORY IS FULL or JOB IS TOO BIG TO BE ALLOCATED!!!\n")
         Memory_IsFull = True
@@ -115,7 +138,7 @@ def DeAllocation( myMemory, total_mem, blckSize, Jobs_InProgress):
 #============================================================================================= 
                     
                 
-rand_job_input_file  = open("output.txt", "r")
+rand_job_input_file = open("output.txt", "r")
 
 # ASK USER TO ENTER MEMORY UNIT SIZE
 #=====================================================================================
@@ -186,11 +209,12 @@ start_loc =0
 job =0
 
 lenProgress = 0
-
 heapRunTime =0
 heapSize = 0
 heapJob =0
 heapType =0 
+
+NFLocation = 0
 
 while cur_time < 100: 
     
@@ -215,7 +239,7 @@ while cur_time < 100:
               print(JobHeapList[heap])
           '''    
           #allocate Code portion
-          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)            
+          start_loc = NFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)
           Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz,4)
           
           # BREAKS OUT OF LOOP WHEN MEMORY IS FULL
@@ -225,7 +249,10 @@ while cur_time < 100:
           Jobs_InProgress.append(JobHolder[cur_job])
           
           # allocate Stack portion
-          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job],  memory_unit_sz,5) 
+          start_loc = NFalloc(myMemoryUnit,JobHolder[cur_job],  memory_unit_sz,5)
+
+          start_loc = NFalloc(myMemoryUnit,JobHolder[cur_job],  memory_unit_sz,5)
+
           Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
     
     
@@ -249,15 +276,15 @@ while cur_time < 100:
             DeAllocation(myMemoryUnit, total_mem, memory_unit_sz, Jobs_InProgress[job])
                                 
             Jobs_InProgress.pop(job)
-            lenProgress -=1
+            lenProgress -= 1
        
-        job+=1
+        job += 1
     
     job = 0    
 #DECREMENT THE REMAINING TIME FOR THE JOB WHEN ITS MEMORY========================== 
     for cnt in range(len(Jobs_InProgress)):
         
-        Jobs_InProgress[cnt][3] -=1 
+        Jobs_InProgress[cnt][3] -= 1
     
     
 #CHECK IF MEMORY IS FULL - BREAKS OUT LOOP IF FULL=================================
