@@ -1,5 +1,4 @@
 import random
-import math
 
 class Memory_Entire_Unit:
     
@@ -38,92 +37,32 @@ def printMemory(size, mem, blckSize):
                 print('-', end = " ")
        
         print("\n")
- 
-
-Memory_IsFull = False
+  
 
 def FFalloc(allMem, Job, blckSize, segment):
     
     cnt_block =0 
     loc_start =0
-    
-    global Memory_IsFull 
-    
-    tempSize = math.ceil(Job[segment] / blckSize)
-    
+  
+
+    tempSize = round(Job[segment] / blckSize)
             
     for loc in range(len(allMem.entireMem)):
                 
         if allMem.entireMem[loc][0] == '':
-            
-            cnt_block = cnt_block + 1 
-            print("LOCATION: " +str(loc))    
-             
+            cnt_block +=1
+                    
         if cnt_block >= tempSize:
-            
             loc_start = loc - tempSize + 1
-            #cnt_block =0
+            cnt_block =0
+            return loc_start
             break
         
-    if cnt_block < tempSize:
-        Memory_IsFull = True
+    
+    return False
 
-    return loc_start
 
- 
 
-      
-def BFalloc(allMem, Job, blckSize, segment):
-    
-    cnt_block =0
-    loc_start =0  
-    loc =0
-    
-    temp_loc=0
-    global Memory_IsFull
-    
-    diff = 10000000000 # Large number to set it as default 
-    
-    tempSize = round(Job[segment] / blckSize)
-    
-    BestFit =[loc_start, diff]
-    
-    while loc < len(allMem.entireMem):
-         
-        
-        if allMem.entireMem[loc][0] == '':    
-            
-            temp_loc = loc
-            
-            while allMem.entireMem[temp_loc][0] =='' and temp_loc < len(allMem.entireMem) - 1:
-                
-                cnt_block+=1 
-                
-                temp_loc +=1 
-                
-            diff = cnt_block - tempSize
-            
-            if diff < BestFit[1] and diff >=0:
-                BestFit[0] = loc
-                BestFit[1] = diff
-            
-                
-            loc = temp_loc 
-            temp_loc = 0 
-            cnt_block =0
-        
-        loc += 1
-                  
-        
-    if cnt_block <= tempSize: 
-        Memory_IsFull = True
-        
-
-    print("\n")
-    return BestFit[0]
-                
-            
-        
 
 def Allocation(myMemory, Job, loc, blckSize, segment ):
     
@@ -221,9 +160,9 @@ print('\n')
 
 myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 
-Job1 =[1, 3, "Small", 3, 25, 30, 50]
-Job2 = [2, 5, "Large", 4, 90, 40, 70]
-Job3 =[3, 8, "Medium", 6, 30, 30, 50]
+Job1 =[1, 3, "Small", 5, 25, 30, 100]
+Job2 = [2, 8, "Large", 10, 90, 40, 30]
+Job3 =[3, 10, "Medium", 6, 30, 30, 500]
 Job4 =[4, 12, "Small", 10, 20, 20, 600]
 Job5 = [5, 17,"Small", 9, 25, 25, 700]
 Job6 = [6, 20,"Medium", 9, 101, 25, 700]
@@ -232,7 +171,7 @@ Job8 = [8, 31,"Large", 9, 111, 25, 700]
 Job9 = [9, 45,"Large", 9, 141, 25, 700]
 Job10 = [10, 51,"Small", 9, 16, 25, 700]
 
-JobHolder = [Job1, Job2]
+JobHolder = [Job1 ]
 
 '''Job2, Job3, Job4, Job5, Job6, Job7, Job8, Job9, Job10] '''
 
@@ -255,15 +194,14 @@ heapType =0
 
 heap_alloc =0 
 
-while cur_time < 9: 
+while cur_time < 20: 
     
 #CHECKS ALL THE JOBS IN JOB HOLDER LIST============================================
     for cur_job in range(len(JobHolder)):
    
         # CHECK IF JOBS HAS ARRIVED TO THE MEMORY
-        
         if cur_time == JobHolder[cur_job][1]:
-         
+            
           #create the heap elements
           for heap in range(JobHolder[cur_job][6]):
               heapRunTime = random.randint(1,JobHolder[cur_job][3])
@@ -274,34 +212,32 @@ while cur_time < 9:
               JobHeapList.append([heapJob, "NA", JobHolder[cur_job][2], heapRunTime, heapSize ]) 
               
           #allocate Code portion
-          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)  
-          #start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz,4)
-          
-          if Memory_IsFull == False:
+         
               
-              Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz,4)        
-              Jobs_InProgress.append(JobHolder[cur_job])
+          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)
+          print(start_loc)
+          
+         
+             
+          Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz,4)
+          Jobs_InProgress.append(JobHolder[cur_job])
+              
+         
           
           # allocate Stack portion
-          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job],  memory_unit_sz,5)
-          #start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4)
+          start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job],  memory_unit_sz,5) 
           
-          if Memory_IsFull == False:
-              
+          if start_loc != False:
               Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
-      
-#====================================================================================================
-              
-# ALLOCATES THE HEAP ELEMENTS INTO THE MEMORY - SMALL, MEDIUM, LARGE
-   
-#=====================================================================================================
-              
-    '''              
-    if  Memory_IsFull == True:
-        print("MEMORY IS FULL OR CANNOT ALLOCATE ANYMORE JOBS! ")
-        break
-    
-    if len(JobHeapList) != 0 and Memory_IsFull == False:
+          
+    '''    
+    for heap in range(len(JobHeapList)):
+        print(JobHeapList[heap])
+    '''    
+# ALLOCATES THE HEAP ELEMENTS INTO THE MEMORY 
+  
+
+    if len(JobHeapList) != 0:
         
         if JobHeapList[0][2] == "Small":
             
@@ -309,62 +245,33 @@ while cur_time < 9:
                 
                 start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz,4)
                 
-                if Memory_IsFull == False:
-                    
+                if start_loc != False:
                     Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
                     Jobs_InProgress.append(JobHeapList[0])                
                     JobHeapList.pop(0)
                     
-                elif Memory_IsFull == True:
+                elif start_loc == False: 
                     break
-                                 
+                
                 heap_alloc +=1
-                
-                
+            
         elif JobHeapList[0][2] == "Medium" :
             
-            while  heap_alloc < 100 and len(JobHeapList) != 0:
-                
-                start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
-                
-                if Memory_IsFull == False:
-                    
-                    Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])                
-                    JobHeapList.pop(0)
-                    
-                elif Memory_IsFull == True:
-                    
-                    break
-                
+            while  heap_alloc < 100:
+                print("THIS ELEMENT BELONGS TO MEDIUM JOB")
                 heap_alloc +=1
             
         elif JobHeapList[0][2] =="Large":
             
-            while heap_alloc < 250 and len(JobHeapList) !=0:
-                
-                start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
-                
-                if Memory_IsFull == False:
-                    
-                    Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])
-                    JobHeapList.pop(0)
-                    
-                elif Memory_IsFull == True:
-                    
-                    break 
-                
+            while heap_alloc < 250:
+                print("THIS ELEMENT BELONGS TO LARGE JOB")
                 heap_alloc +=1
-      '''         
-                        
-    heap_alloc =0
-
+       
+      
+    heap_alloc = 0
     print("Time: " + str(cur_time))
     print("My Memory Contents After Allocation: ")
     printMemory(myMemoryUnit.entireMem, myMemoryUnit, memory_unit_sz)
-    
-    
     
 #DEALLOCATES JOBS ONCE RUNTIME IS DONE==========================    
     lenProgress = len(Jobs_InProgress) 
@@ -377,15 +284,23 @@ while cur_time < 9:
             lenProgress -=1
             Jobs_InProgress.pop(job)
             job-=1
-            
+       
         job+=1
         
     job = 0    
- 
+    
 #DECREMENT THE REMAINING TIME FOR THE JOB WHEN ITS MEMORY========================== 
     for cnt in range(len(Jobs_InProgress)):
         
         Jobs_InProgress[cnt][3] -=1 
-  
+    
+    
+#CHECK IF MEMORY IS FULL - BREAKS OUT LOOP IF FULL=================================
+    
+    #print("Time: " + str(cur_time))
+    #print("My Memory Contents: ")
+    #printMemory(myMemoryUnit.entireMem, myMemoryUnit, memory_unit_sz)  
+    print("\n")
+    
     cur_time+=1
     
