@@ -8,6 +8,28 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/../../../Downloads/Project2_Part2.py">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state>
+                    <caret selection-end-line="448" selection-end-column="4" />
+                    <folding>
+                      <element signature="e#0#13#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="false">
@@ -18,8 +40,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Project2_Part2.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="217">
-              <caret line="278" column="19" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
+            <state relative-caret-position="609">
+              <caret line="425" selection-start-line="425" selection-end-line="425" />
               <folding>
                 <element signature="e#0#13#0" expanded="true" />
               </folding>
@@ -36,6 +58,7 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch.py" />
+        <option value="$PROJECT_DIR$/../../../Downloads/Project2_Part2.py" />
         <option value="$PROJECT_DIR$/Project2_Part2.py" />
       </list>
     </option>
@@ -51,7 +74,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-216" />
+    <option name="x" value="141" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
@@ -176,7 +199,7 @@
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.032502707" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.2426869" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -215,10 +238,20 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../../../Downloads/Project2_Part2.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret selection-end-line="448" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#13#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Project2_Part2.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="217">
-          <caret line="278" column="19" selection-start-line="278" selection-start-column="19" selection-end-line="278" selection-end-column="19" />
+        <state relative-caret-position="609">
+          <caret line="425" selection-start-line="425" selection-end-line="425" />
           <folding>
             <element signature="e#0#13#0" expanded="true" />
           </folding>
