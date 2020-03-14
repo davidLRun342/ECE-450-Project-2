@@ -6,6 +6,59 @@ csvFile = open("outputCSV.csv","w")
 txt = open("output.txt","w+")
 write_outfile = csv.writer(csvFile)
 
+def ValidateInputLine(fileinput):
+    job = fileinput.split()
+    if job[2] == "Small":
+        if int(job[3]) > 3 and int(job[3]) < 7:
+            if int(job[4]) > 39 and int(job[4]) < 61:
+                if int(job[5]) > 19 and int(job[5]) < 41:
+                    if 0 == int(job[6]) % 50:
+                        return job
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+    if job[2] == "Medium":
+        if int(job[3]) > 8 and int(job[3]) < 12:
+            if int(job[4]) > 59 and int(job[4]) < 121:
+                if int(job[5]) > 39 and int(job[5]) < 81:
+                    if 0 == int(job[6]) % 100:
+                        return job
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+    if job[2] == "Large":
+        if int(job[3]) > 23 and int(job[3]) < 27:
+            if int(job[4]) > 119 and int(job[4]) < 221:
+                if int(job[5]) > 59 and int(job[5]) < 111:
+                    if 0 == int(job[6]) % 250:
+                        return job
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+
+def peek_line(f):
+    pos = f.tell()
+    line = f.readline()
+    f.seek(pos)
+    return line
+
 class Memory_Entire_Unit:
 
     def __init__(self, memBlock_sz, memTotal):
@@ -464,7 +517,21 @@ while (True):
 
 myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 
+rand_job_input_file = open("output.txt", "r")
+jobRequest = ""
+
 while cur_time < 40:
+    holdJob = (peek_line(rand_job_input_file))
+    holdJob = holdJob.split()
+
+    if int(holdJob[1]) == int(cur_time):
+        jobRequest = rand_job_input_file.readline()
+        if not ValidateInputLine(jobRequest):
+            print("Error Job has been Rejected due to job formatent!")
+        else:
+            JobHolder.append(ValidateInputLine(jobRequest))
+            print(JobHolder)
+
 
     # CHECKS ALL THE JOBS IN JOB HOLDER LIST
     for cur_job in range(len(JobHolder)):
