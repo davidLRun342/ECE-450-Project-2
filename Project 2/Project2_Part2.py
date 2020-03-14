@@ -13,7 +13,9 @@ def ValidateInputLine(fileinput):
             if int(job[4]) > 39 and int(job[4]) < 61:
                 if int(job[5]) > 19 and int(job[5]) < 41:
                     if 0 == int(job[6]) % 50:
-                        return job
+                        ReturnJob =[int(job[0]),int(job[1]),job[2],int(job[3]),int(job[4]),int(job[5]),int(job[6])]
+                        return ReturnJob
+                    
                     else:
                         return False
                 else:
@@ -28,7 +30,8 @@ def ValidateInputLine(fileinput):
             if int(job[4]) > 59 and int(job[4]) < 121:
                 if int(job[5]) > 39 and int(job[5]) < 81:
                     if 0 == int(job[6]) % 100:
-                        return job
+                        ReturnJob=[int(job[0]),int(job[1]),job[2],int(job[3]),int(job[4]),int(job[5]),int(job[6])]
+                        return ReturnJob
                     else:
                         return False
                 else:
@@ -43,7 +46,9 @@ def ValidateInputLine(fileinput):
             if int(job[4]) > 119 and int(job[4]) < 221:
                 if int(job[5]) > 59 and int(job[5]) < 111:
                     if 0 == int(job[6]) % 250:
-                        return job
+                        
+                        ReturnJob =[int(job[0]),int(job[1]),job[2],int(job[3]),int(job[4]),int(job[5]),int(job[6])]
+                        return ReturnJob
                     else:
                         return False
                 else:
@@ -254,7 +259,7 @@ def BFalloc(allMem, Job, blckSize, segment):
                 foundSpace = True
                 BestFit[0] = loc
                 BestFit[1] = diff
-                print(BestFit[0])
+            
 
             loc = temp_loc
             cnt_block = 0
@@ -293,8 +298,7 @@ def WFalloc(allMem, Job, blckSize, segment):
             temp_loc  =loc
         
             while allMem.entireMem[temp_loc][0] == '' and  temp_loc != len(allMem.entireMem)-1 :
-    
-                
+      
                 cnt_block +=1 
                 temp_loc +=1
                 
@@ -385,7 +389,8 @@ heapType = 0
 
 heap_alloc = 0
 
-
+totMemAlloc = 0
+FreeMem =0
 # =========================================================================================
 
 #               -VALIDATES USER INPUT FOR PERCENTAGES OF SMALL, MEDIUM, LARGE
@@ -410,12 +415,12 @@ while True:
    else:
        print("Error! All 3 jobs must equal 100%")
  
+TotNumJobs = 100 
+number_sml_jobs =  TotNumJobs * (int(sml_job) / 100)
+number_med_jobs = TotNumJobs * (int(med_job) / 100)
+number_lrg_jobs = TotNumJobs * (int(lrg_job) / 100)
  
-number_sml_jobs =  2400 * (int(sml_job) / 100)
-number_med_jobs = 2400 * (int(med_job) / 100)
-number_lrg_jobs = 2400 * (int(lrg_job) / 100)
- 
-while time < 12000:
+while time < TotNumJobs:
  
    if time % 5 == 1:
        
@@ -520,25 +525,26 @@ myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 rand_job_input_file = open("output.txt", "r")
 jobRequest = ""
 
-while cur_time < 40:
+while cur_time < 100:
+    
     holdJob = (peek_line(rand_job_input_file))
     holdJob = holdJob.split()
 
     if int(holdJob[1]) == int(cur_time):
         jobRequest = rand_job_input_file.readline()
+        
         if not ValidateInputLine(jobRequest):
             print("Error Job has been Rejected due to job formatent!")
         else:
             JobHolder.append(ValidateInputLine(jobRequest))
-            print(JobHolder)
-
-
+            
+   
+    
     # CHECKS ALL THE JOBS IN JOB HOLDER LIST
     for cur_job in range(len(JobHolder)):
         
         # CHECK IF JOBS HAS ARRIVED TO THE MEMORY
         if cur_time == JobHolder[cur_job][1]:  
-            
             
             # create the heap elements
             for heap in range(JobHolder[cur_job][6]):       
@@ -546,7 +552,7 @@ while cur_time < 40:
                 heapRunTime = random.randint(1, JobHolder[cur_job][3])
                 heapType = JobHolder[cur_job][2]
                 heapSize = random.randint(20, 50)
-                heapJob = str(JobHolder[cur_job][0]) + ' ' + str(heap + 1) + ' HE'
+                heapJob = JobHolder[cur_job][0]
 
                 JobHeapList.append([heapJob, "NA", JobHolder[cur_job][2], heapRunTime, heapSize])
 
@@ -565,6 +571,7 @@ while cur_time < 40:
 
             if Memory_IsFull == False:
                 Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 4)
+                totMemAlloc += JobHolder[cur_job][4]
                 Jobs_InProgress.append(JobHolder[cur_job])
 
             #ALLOCATE STACK PORTION
@@ -581,11 +588,11 @@ while cur_time < 40:
                 start_loc = WFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5)
 
             if Memory_IsFull == False:
+                
                 Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
                 Jobs_InProgress.append(JobHolder[cur_job])
+                totMemAlloc += JobHolder[cur_job][5]
             
-            if Memory_IsFull == False:
-                Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
 
 #=====================================================================================================
 
@@ -608,7 +615,8 @@ while cur_time < 40:
                 if Memory_IsFull == False:
 
                     Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])                
+                    Jobs_InProgress.append(JobHeapList[0])    
+                    totMemAlloc += JobHolder[cur_job][5]
                     JobHeapList.pop(0)
 
                 elif Memory_IsFull == True:
@@ -626,7 +634,8 @@ while cur_time < 40:
                 if Memory_IsFull == False:
 
                     Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])                
+                    Jobs_InProgress.append(JobHeapList[0])
+                    totMemAlloc += JobHolder[cur_job][5]
                     JobHeapList.pop(0)
 
                 elif Memory_IsFull == True:
@@ -645,6 +654,7 @@ while cur_time < 40:
 
                     Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
                     Jobs_InProgress.append(JobHeapList[0])
+                    totMemAlloc += JobHolder[cur_job][5]
                     JobHeapList.pop(0)
 
                 elif Memory_IsFull == True:
@@ -657,8 +667,8 @@ while cur_time < 40:
     heap_alloc = 0
 
     print("Time: " + str(cur_time))
-    print("My Memory Contents After Allocation: ")
-    printMemory(myMemoryUnit.entireMem, myMemoryUnit, memory_unit_sz)
+    #print("My Memory Contents After Allocation: ")
+    #printMemory(myMemoryUnit.entireMem, myMemoryUnit, memory_unit_sz)
 
     #DEALLOCATES JOBS ONCE RUNTIME IS DONE==========================
     lenProgress = len(Jobs_InProgress)
@@ -680,3 +690,36 @@ while cur_time < 40:
         Jobs_InProgress[cnt][3] -= 1
 
     cur_time += 1
+
+TotalSizeMem = total_mem * memory_unit_sz
+
+PrcntMemAlloc = (totMemAlloc / (total_mem * memory_unit_sz))* 100
+print("-------------------------------------------------------------")
+print("Memory Management Metrics")    
+print("-------------------------------------------------------------")
+print("Number of Small Jobs: " + str(number_sml_jobs))
+print("Number of Medium Jobs: "+ str(number_med_jobs))
+print("Number of Large Jobs: "+ str(number_lrg_jobs))
+print("\n")
+
+print("Total Memory Defined: " + str(total_mem * memory_unit_sz))
+print("Amount of Memory Allocated: " + str(totMemAlloc))
+print("% Memory in Use: " + str())
+print("% Internal Fragmentation: ")
+print("% Memory Free: " + str(FreeMem))
+print("% External Fragmentation: ")
+print("Largest Free Space: ")
+print("Smallest Free Space: ")
+print("\n")
+
+print("Numbr of Lost Objects:")
+print("Total memory size of lost objects: ")
+print("%Memory  of lost objects: ")
+print("\n")
+
+print("Number of Allocation: ")
+print("Numbr of Allocation Operations: ")
+print("Avg Numb of Alloc Operations: ")
+print("Number of Free Requests: ")
+print("Number of Free Operations: ")
+print("Avg Numbr of alloc operations: ")
