@@ -10,7 +10,7 @@ def ValidateInputLine(fileinput):
     job = fileinput.split()
     if job[2] == "Small":
         if int(job[3]) > 3 and int(job[3]) < 7:
-            if int(job[4]) > 39 and int(job[4]) < 61:
+            if int(job[4]) > 39 and int(job[4]) < 81:
                 if int(job[5]) > 19 and int(job[5]) < 41:
                     if 0 == int(job[6]) % 50:
                         ReturnJob =[int(job[0]),int(job[1]),job[2],int(job[3]),int(job[4]),int(job[5]),int(job[6])]
@@ -389,8 +389,9 @@ heapType = 0
 
 heap_alloc = 0
 
-totMemAlloc = 0
-FreeMem =0
+TotNumJobs = 50 
+
+
 # =========================================================================================
 
 #               -VALIDATES USER INPUT FOR PERCENTAGES OF SMALL, MEDIUM, LARGE
@@ -415,11 +416,10 @@ while True:
    else:
        print("Error! All 3 jobs must equal 100%")
  
-TotNumJobs = 100 
 number_sml_jobs =  TotNumJobs * (int(sml_job) / 100)
 number_med_jobs = TotNumJobs * (int(med_job) / 100)
 number_lrg_jobs = TotNumJobs * (int(lrg_job) / 100)
- 
+
 while time < TotNumJobs:
  
    if time % 5 == 1:
@@ -520,6 +520,9 @@ while (True):
     if(althm > 0 and althm < 5 ):
         break
 
+TotalSizeMem = total_mem * memory_unit_sz
+totMemAlloc = 0
+PrcntMemUse = []
 myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 
 rand_job_input_file = open("output.txt", "r")
@@ -529,15 +532,19 @@ while cur_time < 100:
     
     holdJob = (peek_line(rand_job_input_file))
     holdJob = holdJob.split()
-
-    if int(holdJob[1]) == int(cur_time):
-        jobRequest = rand_job_input_file.readline()
-        
-        if not ValidateInputLine(jobRequest):
-            print("Error Job has been Rejected due to job formatent!")
-        else:
-            JobHolder.append(ValidateInputLine(jobRequest))
+    
+    if not holdJob ==[]:
+          
+        if int(holdJob[1]) == int(cur_time):
             
+            jobRequest = rand_job_input_file.readline()
+            
+            if not ValidateInputLine(jobRequest):
+                print("Error Job has been Rejected due to job formatent!")
+            else:
+                JobHolder.append(ValidateInputLine(jobRequest))
+            
+     
    
     
     # CHECKS ALL THE JOBS IN JOB HOLDER LIST
@@ -678,6 +685,7 @@ while cur_time < 100:
         if int(Jobs_InProgress[job][3]) <= 1 and Jobs_InProgress[job][0] % 100 !=0  and option_lost_obj == "y":
             DeAllocation(myMemoryUnit, total_mem, memory_unit_sz, Jobs_InProgress[job])
             lenProgress -= 1
+        
             Jobs_InProgress.pop(job)
             job -= 1
 
@@ -689,11 +697,20 @@ while cur_time < 100:
     for cnt in range(len(Jobs_InProgress)):
         Jobs_InProgress[cnt][3] -= 1
 
+    PrcntMemUse.append(totMemAlloc / TotalSizeMem )
+    
     cur_time += 1
 
-TotalSizeMem = total_mem * memory_unit_sz
 
-PrcntMemAlloc = (totMemAlloc / (total_mem * memory_unit_sz))* 100
+temp=0
+for i in range(len(PrcntMemUse)):
+    temp+= PrcntMemUse[i]
+    
+temp = temp / len(PrcntMemUse)
+    
+
+
+PrcntMemAlloc = (totMemAlloc / TotalSizeMem) *100
 print("-------------------------------------------------------------")
 print("Memory Management Metrics")    
 print("-------------------------------------------------------------")
@@ -702,11 +719,11 @@ print("Number of Medium Jobs: "+ str(number_med_jobs))
 print("Number of Large Jobs: "+ str(number_lrg_jobs))
 print("\n")
 
-print("Total Memory Defined: " + str(total_mem * memory_unit_sz))
+print("Total Memory Defined: " + str(TotalSizeMem))
 print("Amount of Memory Allocated: " + str(totMemAlloc))
-print("% Memory in Use: " + str())
+print("% Memory in Use: " + str(temp))
 print("% Internal Fragmentation: ")
-print("% Memory Free: " + str(FreeMem))
+print("% Memory Free: " )
 print("% External Fragmentation: ")
 print("Largest Free Space: ")
 print("Smallest Free Space: ")
