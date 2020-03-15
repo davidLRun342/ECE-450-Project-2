@@ -442,8 +442,10 @@ def FindSmallFreeSpace(allMem):
            
     return WorseFit[1]
 
-def printMetrics(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r):
+def printMetrics( a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r, ga, ba):
     txtSumm.write("----------------------------------------------------------")
+    txtSumm.write("\nTotal Memory Defined: " + str(TotalSizeMem))
+    txtSumm.write("\nAmount of Memory Allocated: " + str(memAlloc) + "\n")
     txtSumm.write("\n% Memory in Use: " + str(a))
     txtSumm.write("\n% Memory Free: " + str (round(b, 2)))
     txtSumm.write("\n% Internal Fragmentation: " + str(c))
@@ -466,6 +468,8 @@ def printMetrics(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r):
     txtSumm.write("\n% of Time Memory is Above 50% Usage: " + str(r))
     txtSumm.write("\n\n")
     
+    print("\nTotal Memory Defined: " + str(ga))
+    print("\nAmount of Memory Allocated: " + str(ba) + "\n")
     print("% Memory in Use: " + str(a))
     print("% Memory Free: " + str (round(b, 2)))
     print("% Internal Fragmentation: " + str(c))
@@ -655,7 +659,7 @@ print('\n')
 #=========================================================================================
 althm =1 
 AllAlgthm =[]
-timeRunningFor = 150
+timeRunningFor = 50
 TotalSizeMem = total_mem * memory_unit_sz
 totMemAlloc = 0
 memAlloc =0
@@ -721,6 +725,7 @@ jobRequest = ""
 
 while althm < 5:
     
+    rand_job_input_file.seek(0)
     
     if althm == 1:
         txtSumm.write("\n====================================================" )
@@ -769,8 +774,7 @@ while althm < 5:
                     print("Error Job has been Rejected due to job formatent!")
                 else:
                     JobHolder.append(ValidateInputLine(jobRequest))
-                
-        
+                    
         # CHECKS ALL THE JOBS IN JOB HOLDER LIST
         for cur_job in range(len(JobHolder)):
             
@@ -901,7 +905,7 @@ while althm < 5:
                         cntHeapMem += JobHeapList[0][4]
                         txtLog.write("\n\tJOB " + str(JobHeapList[0][0]) + " HEAP ELEMENT " + str(JobHeapList[0][1]) + " HAS ALLOCATED")
                         
-                        if JobHolder[cur_job][4] % memory_unit_sz !=0:
+                        if JobHeapList[0][4] % memory_unit_sz !=0:
                             temp1 = abs(math.ceil(JobHeapList[0][4] / memory_unit_sz) - JobHeapList[0][4])
                             IntrnalFrag += temp1
                             
@@ -930,8 +934,8 @@ while althm < 5:
                         totMemAlloc += JobHeapList[0][4]
                         cntHeapMem -= Jobs_InProgress[job][4]
                         
-                        if JobHolder[cur_job][4] % memory_unit_sz !=0:
-                            temp1 = abs(math.ceil(JobHolder[cur_job][4] / memory_unit_sz) - JobHolder[cur_job][4])
+                        if JobHeapList[0][4] % memory_unit_sz !=0:
+                            temp1 = abs(math.ceil(JobHeapList[0][4]/ memory_unit_sz) - JobHeapList[0][4])
                                 
                             IntrnalFrag += temp1
                         JobHeapList.pop(0)
@@ -953,7 +957,6 @@ while althm < 5:
     
             if int(Jobs_InProgress[job][3]) <= 1:
                 NumFreeReq +=1
-                txtSumm.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " DEPARTS")
                 
                 if option_lost_obj == "y":
                     
@@ -965,7 +968,8 @@ while althm < 5:
                         
                         
                         if Jobs_InProgress[job][5] =="NA":
-                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[cur_job][1]) + " HAS DEALLOCATED")
+                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[job][1]) + " HAS DEALLOCATED")
+                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[job][1]) + " HAS DEPARTED")
                             NumFreeOp +=1 
                             totMemAlloc -= Jobs_InProgress[job][4]
                             cntHeapMem -= Jobs_InProgress[job][4]
@@ -973,7 +977,8 @@ while althm < 5:
                             
     
                         else:
-                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HAS DEALLOCATED")
+                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HAS DEALLOCATED")
+                            txtSumm.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " DEPARTED")
                             NumFreeOp +=2
                             totMemAlloc -=Jobs_InProgress[job][5]
                             totMemAlloc -= Jobs_InProgress[job][4]
@@ -992,15 +997,16 @@ while althm < 5:
                     lenProgress -= 1
                         
                     if Jobs_InProgress[job][5] =="NA":
-                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[cur_job][1]) + " HAS DEALLOCATED")
+                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[cur_job][1]) + " HAS DEALLOCATED")
+                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[job][1]) + " HAS DEPARTED")
                         NumFreeOp +=1 
                         totMemAlloc -= Jobs_InProgress[job][4]
                         HeapEleLeaving+=1
-                        cntHeapMem -= JobHeapList[job][4]
+                        cntHeapMem -= Jobs_InProgress[job][4]
                             
                     else: 
                         NumFreeOp +=2
-                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HAS DEALLOCATED")
+                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " HAS DEALLOCATED")
                         totMemAlloc -= Jobs_InProgress[job][4]
                         totMemAlloc -= Jobs_InProgress[job][5]
                         
@@ -1064,6 +1070,9 @@ while althm < 5:
     
         if cur_time % 20 == 0: #and cur_time >=2000:
             txtSumm.write("\n\n")
+            
+            txtSumm.write("\nTotal Memory Defined: " + str(TotalSizeMem))
+            txtSumm.write("\nAmount of Memory Allocated: " + str(memAlloc) + "\n")
             txtSumm.write("\n% Memory in Use: " + str(PrcntMemUse))
             txtSumm.write("\n% Memory Free: " + str (round(Prcnt_FreeMem, 2)))
             txtSumm.write("\n% Internal Fragmentation: " + str(PercntIntrnalFrag))
@@ -1087,7 +1096,7 @@ while althm < 5:
             txtSumm.write("\n")
         
         if cur_time >= timeRunningFor -1:
-            AllAlgthm.append([PrcntMemUse, Prcnt_FreeMem, PercntIntrnalFrag, PercntExtFrag, lrgFree, smllFree, Num_LostObj,Tot_MemLostObj, Percnt_LostObj,Num_Alloc, Num_AllocOp, Avg_AllocOp, NumFreeOp,NumFreeReq, HeapEleLeaving, HeapMemAll, isLess20Mem,isGreater70Mem])
+            AllAlgthm.append([PrcntMemUse, Prcnt_FreeMem, PercntIntrnalFrag, PercntExtFrag, lrgFree, smllFree, Num_LostObj,Tot_MemLostObj, Percnt_LostObj,Num_Alloc, Num_AllocOp, Avg_AllocOp, NumFreeOp,NumFreeReq, HeapEleLeaving, HeapMemAll, isLess20Mem,isGreater70Mem, TotalSizeMem, memAlloc, ])
             
         ExtrnalFrag =0    
         IntrnalFrag=0
@@ -1124,7 +1133,7 @@ for i in range(len(AllAlgthm)):
         txtSumm.write("\n\nAlgorithm: Worse Fit" )
         print("\nAlgorithm: Worse Fit" )
     
-    printMetrics(AllAlgthm[i][0],AllAlgthm[i][1], AllAlgthm[i][2], AllAlgthm[i][3], AllAlgthm[i][4], AllAlgthm[i][5], AllAlgthm[i][6], AllAlgthm[i][7], AllAlgthm[i][8], AllAlgthm[i][9], AllAlgthm[i][10],AllAlgthm[i][11], AllAlgthm[i][12], AllAlgthm[i][13], AllAlgthm[i][14], AllAlgthm[i][15], AllAlgthm[i][16], AllAlgthm[i][17])
+    printMetrics(AllAlgthm[i][0],AllAlgthm[i][1], AllAlgthm[i][2], AllAlgthm[i][3], AllAlgthm[i][4], AllAlgthm[i][5], AllAlgthm[i][6], AllAlgthm[i][7], AllAlgthm[i][8], AllAlgthm[i][9], AllAlgthm[i][10],AllAlgthm[i][11], AllAlgthm[i][12], AllAlgthm[i][13], AllAlgthm[i][14], AllAlgthm[i][15], AllAlgthm[i][16], AllAlgthm[i][17],AllAlgthm[i][18], AllAlgthm[i][19] )
     
 
 
