@@ -48,7 +48,7 @@ def ValidateInputLine(fileinput):
     if job[2] == "Large":
         if int(job[3]) > 23 and int(job[3]) < 27:
             if int(job[4]) > 119 and int(job[4]) < 221:
-                if int(job[5]) > 59 and int(job[5]) < 111:
+                if int(job[5]) > 59 and int(job[5]) < 121:
                     if 0 == int(job[6]) % 250:
                         
                         ReturnJob =[int(job[0]),int(job[1]),job[2],int(job[3]),int(job[4]),int(job[5]),int(job[6])]
@@ -85,8 +85,7 @@ def GenerateTimeUnit(counter):
    timeUnit = 0
    timeUnit = random.randint(0, 4) + counter
    return (timeUnit)
- 
- 
+
 def GenerateSmlJob(time, cnt_j):
    RunningSize = random.randint(4, 6)
    CodeSize = random.randint(40, 80)
@@ -357,7 +356,6 @@ def DeAllocation(myMemory, total_mem, blckSize, Jobs_InProgress):
                 if myMemory.entireMem[block][cell][0] == Jobs_InProgress[0]:
                     myMemory.entireMem[block][cell] = ''
 
-
 def FindLrgFreeSpace(allMem):
 
     loc =0 
@@ -399,7 +397,6 @@ def FindLrgFreeSpace(allMem):
         Memory_IsFull = True
            
     return WorseFit[1]
-
 
 def FindSmallFreeSpace(allMem):
 
@@ -613,6 +610,7 @@ while time < 12000:
    time += 1
 
 txt.close()
+
 # =========================================================================================
 #  ZAID- WILL NEED TO UPDATE THIS WITH YOUR CODE
 # ASK THE USER TO ENTER THE CELLS FOR EACH MEMORY BLOCK
@@ -621,49 +619,47 @@ txt.close()
 while (True):
 
     memory_unit_sz = input("Please enter the size of the Memory Block that is a multiple of 8: ")
-    memory_unit_sz = int(memory_unit_sz)
+    try:
+        memory_unit_sz = int(memory_unit_sz)
+        if (memory_unit_sz % 8 == 0 and memory_unit_sz > 0):
+            break
+        elif (memory_unit_sz < 0):
+            print("Please enter a positive integer")
 
-    if (memory_unit_sz % 8 == 0 and memory_unit_sz > 0):
-        break
-    elif (memory_unit_sz < 0):
+        else:
+            print("Please enter a valid number!")
+    except ValueError:
         print("Please enter a positive integer")
 
-    else:
-        print("Please enter a valid number!")
-        
-# =========================================================================================
-# ZAID- WILL NEED TO UPDATE THIS WITH YOUR CODE      
-# ASK THE USER TO ENTER THE TOTAL SIZE OF MEMORY
-        
-# =========================================================================================
 while (True):
-    total_mem = input("Please enter the Total Size of the Memory: ")
-    total_mem = int(total_mem)
+    try:
+        total_mem = input("Please enter the Total Size of the Memory: ")
+        total_mem = int(total_mem)
 
-    if (total_mem > 0):
-        break
+        if (total_mem > 0):
+            break
 
-    print("Please enter a valid size! ")
-# =========================================================================================
-    
- # ZAID- WILL NEED TO UPDATE THIS WITH YOUR CODE     
-# ASK THE USER TO ENTER IF THEY WOULD LIKE TO SIMULATE LOSTED OBJECTS
-    
-# =========================================================================================
+        print("Please enter a valid size! ")
+    except ValueError:
+        print("Please enter a valid integer size! ")
+
 while (True):
-    option_lost_obj = input("Would you like to simulate losted objects ? y or n")
+    try:
+        option_lost_obj = input("Would you like to simulate losted objects ? y or n ")
 
-    if (option_lost_obj == 'y' or option_lost_obj == 'n'):
-        break
+        if (option_lost_obj == 'y' or option_lost_obj == 'n'):
+            break
 
-    print("Please type in a valid key entry! y or n")
+        print("Please type in a valid key entry! y or n")
 
-print('\n')
-
+        print('\n')
+    except ValueError:
+        print("Please type in a valid key entry! y or n")
 
 #=========================================================================================
 #               METRIC VARIABLES 
 #=========================================================================================
+
 althm =1 
 AllAlgthm =[]
 timeRunningFor = 50
