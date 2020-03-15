@@ -6,26 +6,26 @@ NEXT FIT:
 Time: 0
 
 
-Total Memory Defined: 240000
-Amount of Memory Allocated: 735617
+Total Memory Defined: 24000
+Amount of Memory Allocated: 562792
 
-% Memory in Use: 85.51
-% Memory Free: 14.49
+% Memory in Use: 0.0
+% Memory Free: 100.0
 % Internal Fragmentation: 0.0
-% External Fragmentation: 12.5
-Largest Free Space: 29974
-Smallest Free Space: 16
+% External Fragmentation: 12.32
+Largest Free Space: 2954
+Smallest Free Space: 1
 Numbr of Lost Objects:0
 Total memory size of lost objects: 0
 % Memory of lost objects: 0.0
-Number of Allocation: 21032
-Numbr of Operations: 36149
-Avg Numb of Alloc Operations: 21032.0
-Number of Free Requests: 15145
-Number of Free Operations: 15117
+Number of Allocation: 16040
+Numbr of Operations: 31404
+Avg Numb of Alloc Operations: 16040.0
+Number of Free Requests: 15396
+Number of Free Operations: 15364
 Four Additional Memory Metrics: 
 ------------------------------------------------------
-Average Number of Heap Elements Leaving: 15089
+Average Number of Heap Elements Leaving: 15332
 Avg % of Heap Elements in Memory: 0.0
 % of Time Memory is Below 50 % Usage: yes
 % of Time Memory is Above 50% Usage: no
@@ -34,29 +34,29 @@ Avg % of Heap Elements in Memory: 0.0
 Time: 1
 
 Time: 2
-	JOB 1 ARRIVES
 
 Time: 3
 
 Time: 4
+	JOB 1 ARRIVES
 
 Time: 5
 
 Time: 6
 
 Time: 7
+	JOB 2 ARRIVES
 
 Time: 8
 
 Time: 9
 
 Time: 10
-	JOB 2 ARRIVES
 
 Time: 11
-	JOB 3 ARRIVES
 
 Time: 12
+	JOB 3 ARRIVES
 
 Time: 13
 
@@ -67,36 +67,36 @@ Time: 15
 Time: 16
 
 Time: 17
-	JOB 4 ARRIVES
 
 Time: 18
 
 Time: 19
 
 Time: 20
+	JOB 4 ARRIVES
 
 
-Total Memory Defined: 240000
-Amount of Memory Allocated: 850112
+Total Memory Defined: 24000
+Amount of Memory Allocated: 711538
 
 % Memory in Use: 100.0
 % Memory Free: 0.0
-% Internal Fragmentation: 2.64
-% External Fragmentation: 12.49
-Largest Free Space: 29472
-Smallest Free Space: 512
+% Internal Fragmentation: 27.34
+% External Fragmentation: 12.33
+Largest Free Space: 2003
+Smallest Free Space: 956
 Numbr of Lost Objects:0
 Total memory size of lost objects: 0
 % Memory of lost objects: 0.0
-Number of Allocation: 24290
-Numbr of Operations: 40881
-Avg Numb of Alloc Operations: 1214.5
-Number of Free Requests: 16623
-Number of Free Operations: 16591
+Number of Allocation: 20298
+Numbr of Operations: 37174
+Avg Numb of Alloc Operations: 1014.9
+Number of Free Requests: 16914
+Number of Free Operations: 16876
 Four Additional Memory Metrics: 
 ------------------------------------------------------
-Average Number of Heap Elements Leaving: 16559
-Avg % of Heap Elements in Memory: 21.28
+Average Number of Heap Elements Leaving: 16838
+Avg % of Heap Elements in Memory: 54.02
 % of Time Memory is Below 50 % Usage: yes
 % of Time Memory is Above 50% Usage: no
 
@@ -106,9 +106,9 @@ Time: 21
 Time: 22
 
 Time: 23
+	JOB 5 ARRIVES
 
 Time: 24
-	JOB 5 ARRIVES
 
 Time: 25
 
@@ -121,6 +121,7 @@ Time: 28
 Time: 29
 
 Time: 30
+	JOB 6 ARRIVES
 
 Time: 31
 
@@ -142,41 +143,42 @@ Time: 38
 Time: 39
 
 Time: 40
+	JOB 8 ARRIVES
 
 
-Total Memory Defined: 240000
-Amount of Memory Allocated: 1026347
+Total Memory Defined: 24000
+Amount of Memory Allocated: 821249
 
-% Memory in Use: 99.5
-% Memory Free: 0.5
-% Internal Fragmentation: 2.74
-% External Fragmentation: 12.5
-Largest Free Space: 29999
-Smallest Free Space: 29999
+% Memory in Use: 0.0
+% Memory Free: 100.0
+% Internal Fragmentation: 11.09
+% External Fragmentation: 12.33
+Largest Free Space: 2463
+Smallest Free Space: 495
 Numbr of Lost Objects:0
 Total memory size of lost objects: 0
 % Memory of lost objects: 0.0
-Number of Allocation: 29294
-Numbr of Operations: 49782
-Avg Numb of Alloc Operations: 732.35
-Number of Free Requests: 20528
-Number of Free Operations: 20488
+Number of Allocation: 23406
+Numbr of Operations: 44686
+Avg Numb of Alloc Operations: 585.15
+Number of Free Requests: 21326
+Number of Free Operations: 21280
 Four Additional Memory Metrics: 
 ------------------------------------------------------
-Average Number of Heap Elements Leaving: 20448
-Avg % of Heap Elements in Memory: 8.79
+Average Number of Heap Elements Leaving: 21234
+Avg % of Heap Elements in Memory: 15.77
 % of Time Memory is Below 50 % Usage: yes
 % of Time Memory is Above 50% Usage: no
 
 
 Time: 41
+	JOB 9 ARRIVES
 
 Time: 42
 
 Time: 43
 
 Time: 44
-	JOB 9 ARRIVES
 
 Time: 45
 
@@ -185,6 +187,6 @@ Time: 46
 Time: 47
 
 Time: 48
-	JOB 10 ARRIVES
 
 Time: 49
+	JOB 10 ARRIVES
