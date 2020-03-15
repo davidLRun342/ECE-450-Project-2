@@ -4,8 +4,9 @@ import csv
 
 csvFile = open("outputCSV.csv","w")
 txt = open("output.txt","w+")
-txtLog = open("Log.txt", "w+")
-txtSumm = open("Summary_Output.txt", "w+")
+
+
+
 
 write_outfile = csv.writer(csvFile)
 
@@ -534,6 +535,12 @@ TotNumJobs = 2400
 #
 # =========================================================================================
 
+LogList = ["FirstFitLog.txt", "NextFitLog.txt", "BestFitLog.txt", "WorstFitLog.txt"]
+Output_Summary = ["FirstFitSummary.txt","NextFitSummary.txt","BestFitSummary.txt","WorstFitSummary.txt"]
+
+txtLog = open(LogList[0], "w+")
+txtSumm = open(Output_Summary[0], "w+")
+
 while True:
    while True:
        sml_job = CheckValidInt("Small")
@@ -723,10 +730,13 @@ myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 rand_job_input_file = open("output.txt", "r")
 jobRequest = ""
 
+
+
+
 while althm < 5:
     
     rand_job_input_file.seek(0)
-    
+
     if althm == 1:
         txtSumm.write("\n====================================================" )
         txtSumm.write("\nFIRST FIT:" )
@@ -735,6 +745,10 @@ while althm < 5:
         txtLog.write("\nFIRST FIT:" )
         txtLog.write("\n====================================================" )
     elif althm == 2:
+        txtLog.close()
+        txtLog.close()
+        txtLog = open(LogList[1], "w+")
+        txtSumm = open(Output_Summary[1], "w+")
         txtSumm.write("\n====================================================" )
         txtSumm.write("\nBEST FIT:" )
         txtSumm.write("\n====================================================" )
@@ -742,6 +756,10 @@ while althm < 5:
         txtLog.write("\nBEST FIT:" )
         txtLog.write("\n====================================================" )
     elif althm == 3:
+        txtLog.close()
+        txtLog.close()
+        txtLog = open(LogList[2], "w+")
+        txtSumm = open(Output_Summary[2], "w+")
         txtSumm.write("\n====================================================" )
         txtSumm.write("\nNEXT FIT:" )
         txtSumm.write("\n====================================================" )
@@ -749,6 +767,10 @@ while althm < 5:
         txtLog.write("\nNEXT FIT:" )
         txtLog.write("\n====================================================" )
     elif althm ==4 :
+        txtLog.close()
+        txtLog.close()
+        txtLog = open(LogList[3], "w+")
+        txtSumm = open(Output_Summary[3], "w+")
         txtSumm.write("\n====================================================" )
         txtSumm.write("\nWORSE FIT:" )
         txtSumm.write("\n====================================================" )
@@ -1094,7 +1116,7 @@ while althm < 5:
             txtSumm.write("\n% of Time Memory is Below 50 % Usage: "+ str(isLess20Mem) )
             txtSumm.write("\n% of Time Memory is Above 50% Usage: " + str(isGreater70Mem ))
             txtSumm.write("\n")
-        
+
         if cur_time >= timeRunningFor -1:
             AllAlgthm.append([PrcntMemUse, Prcnt_FreeMem, PercntIntrnalFrag, PercntExtFrag, lrgFree, smllFree, Num_LostObj,Tot_MemLostObj, Percnt_LostObj,Num_Alloc, Num_AllocOp, Avg_AllocOp, NumFreeOp,NumFreeReq, HeapEleLeaving, HeapMemAll, isLess20Mem,isGreater70Mem, TotalSizeMem, memAlloc, ])
             

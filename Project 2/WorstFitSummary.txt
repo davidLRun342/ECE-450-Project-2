@@ -1,0 +1,299 @@
+
+====================================================
+WORSE FIT:
+====================================================
+
+Time: 0
+
+
+Total Memory Defined: 24000
+Amount of Memory Allocated: 446539
+
+% Memory in Use: 93.97
+% Memory Free: 6.03
+% Internal Fragmentation: 0.0
+% External Fragmentation: 12.38
+Largest Free Space: 2509
+Smallest Free Space: 460
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 12654
+Numbr of Operations: 23870
+Avg Numb of Alloc Operations: 12654.0
+Number of Free Requests: 11264
+Number of Free Operations: 11216
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 11168
+Avg % of Heap Elements in Memory: 0.0
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+Time: 1
+
+Time: 2
+
+Time: 3
+
+Time: 4
+
+Time: 5
+	JOB 1 ARRIVES
+
+Time: 6
+
+Time: 7
+
+Time: 8
+
+Time: 9
+
+Time: 10
+	JOB 2 ARRIVES
+
+Time: 11
+
+Time: 12
+
+Time: 13
+
+Time: 14
+
+Time: 15
+	JOB 3 ARRIVES
+
+Time: 16
+
+Time: 17
+
+Time: 18
+
+Time: 19
+
+Time: 20
+	JOB 4 ARRIVES
+
+
+Total Memory Defined: 24000
+Amount of Memory Allocated: 492708
+
+% Memory in Use: 100.0
+% Memory Free: 0.0
+% Internal Fragmentation: 10.75
+% External Fragmentation: 12.31
+Largest Free Space: 2486
+Smallest Free Space: 8
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 13962
+Numbr of Operations: 25996
+Avg Numb of Alloc Operations: 698.1
+Number of Free Requests: 12088
+Number of Free Operations: 12034
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 11980
+Avg % of Heap Elements in Memory: 4.5
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+Time: 21
+
+Time: 22
+	JOB 5 ARRIVES
+
+Time: 23
+
+Time: 24
+
+Time: 25
+
+Time: 26
+
+Time: 27
+
+Time: 28
+
+Time: 29
+	JOB 6 ARRIVES
+
+Time: 30
+
+Time: 31
+
+Time: 32
+
+Time: 33
+	JOB 7 ARRIVES
+
+Time: 34
+
+Time: 35
+
+Time: 36
+
+Time: 37
+
+Time: 38
+	JOB 8 ARRIVES
+
+Time: 39
+
+Time: 40
+
+
+Total Memory Defined: 24000
+Amount of Memory Allocated: 563147
+
+% Memory in Use: 97.51
+% Memory Free: 2.49
+% Internal Fragmentation: 10.96
+% External Fragmentation: 12.3
+Largest Free Space: 2931
+Smallest Free Space: 21
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 15970
+Numbr of Operations: 29986
+Avg Numb of Alloc Operations: 399.25
+Number of Free Requests: 14076
+Number of Free Operations: 14016
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 13956
+Avg % of Heap Elements in Memory: 0.26
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+Time: 41
+
+Time: 42
+
+Time: 43
+
+Time: 44
+
+Time: 45
+
+Time: 46
+
+Time: 47
+
+Time: 48
+
+Time: 49
+	JOB 10 ARRIVES
+FINAL SUMMARY
+
+Algorithm: First Fit----------------------------------------------------------
+Total Memory Defined: 24000
+Amount of Memory Allocated: 594780
+
+% Memory in Use: 65.12
+% Memory Free: 34.88
+% Internal Fragmentation: 11.78
+% External Fragmentation: 12.46
+Largest Free Space: 2989
+Smallest Free Space: 2989
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 4218
+Numbr of Operations: 7956
+Avg Numb of Alloc Operations: 86.08
+Number of Free Requests: 3754
+Number of Free Operations: 3738
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 3722
+Avg % of Heap Elements in Memory: 0.43
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+
+Algorithm: Next Fit----------------------------------------------------------
+Total Memory Defined: 24000
+Amount of Memory Allocated: 594780
+
+% Memory in Use: 88.55
+% Memory Free: 11.45
+% Internal Fragmentation: 10.46
+% External Fragmentation: 12.42
+Largest Free Space: 2979
+Smallest Free Space: 2979
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 8436
+Numbr of Operations: 15920
+Avg Numb of Alloc Operations: 172.16
+Number of Free Requests: 7516
+Number of Free Operations: 7484
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 7452
+Avg % of Heap Elements in Memory: 2.28
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+
+Algorithm: Best Fit----------------------------------------------------------
+Total Memory Defined: 24000
+Amount of Memory Allocated: 594780
+
+% Memory in Use: 93.97
+% Memory Free: 6.03
+% Internal Fragmentation: 10.48
+% External Fragmentation: 12.38
+Largest Free Space: 2509
+Smallest Free Space: 460
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 12654
+Numbr of Operations: 23870
+Avg Numb of Alloc Operations: 258.24
+Number of Free Requests: 11264
+Number of Free Operations: 11216
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 11168
+Avg % of Heap Elements in Memory: 1.77
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
+
+
+Algorithm: Worse Fit----------------------------------------------------------
+Total Memory Defined: 24000
+Amount of Memory Allocated: 594780
+
+% Memory in Use: 91.81
+% Memory Free: 8.19
+% Internal Fragmentation: 10.82
+% External Fragmentation: 12.38
+Largest Free Space: 2969
+Smallest Free Space: 2969
+Numbr of Lost Objects:0
+Total memory size of lost objects: 0
+% Memory of lost objects: 0.0
+Number of Allocation: 16872
+Numbr of Operations: 31813
+Avg Numb of Alloc Operations: 344.33
+Number of Free Requests: 15005
+Number of Free Operations: 14941
+Four Additional Memory Metrics: 
+------------------------------------------------------
+Average Number of Heap Elements Leaving: 14877
+Avg % of Heap Elements in Memory: 0.52
+% of Time Memory is Below 50 % Usage: yes
+% of Time Memory is Above 50% Usage: no
+
