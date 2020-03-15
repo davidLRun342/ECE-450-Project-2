@@ -655,7 +655,7 @@ print('\n')
 #=========================================================================================
 althm =1 
 AllAlgthm =[]
-timeRunningFor = 50
+timeRunningFor = 150
 TotalSizeMem = total_mem * memory_unit_sz
 totMemAlloc = 0
 memAlloc =0
@@ -1057,7 +1057,7 @@ while althm < 5:
             
             Avg_AllocOp = Num_Alloc / 1
         else:
-            Avg_AllocOp = Num_Alloc / cur_time
+            Avg_AllocOp = round( Num_Alloc / cur_time ,2 )
         
         HeapMemAll = round ((abs(cntHeapMem / TotalSizeMem)) * 100 ,2 )
         
@@ -1086,7 +1086,7 @@ while althm < 5:
             txtSumm.write("\n% of Time Memory is Above 50% Usage: " + str(isGreater70Mem ))
             txtSumm.write("\n")
         
-        if cur_time >= timeRunningFor -2:
+        if cur_time >= timeRunningFor -1:
             AllAlgthm.append([PrcntMemUse, Prcnt_FreeMem, PercntIntrnalFrag, PercntExtFrag, lrgFree, smllFree, Num_LostObj,Tot_MemLostObj, Percnt_LostObj,Num_Alloc, Num_AllocOp, Avg_AllocOp, NumFreeOp,NumFreeReq, HeapEleLeaving, HeapMemAll, isLess20Mem,isGreater70Mem])
             
         ExtrnalFrag =0    
@@ -1106,26 +1106,26 @@ while althm < 5:
     
     althm +=1
 
-
+print(len(AllAlgthm))
+    
 txtSumm.write("\nFINAL SUMMARY" )
 for i in range(len(AllAlgthm)):
-    
+    print(i)
     if i == 0:
         txtSumm.write("\n\nAlgorithm: First Fit" )
         print("\nAlgorithm: First Fit" )
     elif i == 1:
         txtSumm.write("\n\nAlgorithm: Next Fit" )
-        print("\nAlgorithm: First Fit" )
+        print("\nAlgorithm: Next Fit" )
     elif i == 2:
         txtSumm.write("\n\nAlgorithm: Best Fit" )
-        print("\nAlgorithm: First Fit" )
+        print("\nAlgorithm: Best Fit" )
     elif i ==3:
         txtSumm.write("\n\nAlgorithm: Worse Fit" )
-        print("\nAlgorithm: First Fit" )
+        print("\nAlgorithm: Worse Fit" )
     
     printMetrics(AllAlgthm[i][0],AllAlgthm[i][1], AllAlgthm[i][2], AllAlgthm[i][3], AllAlgthm[i][4], AllAlgthm[i][5], AllAlgthm[i][6], AllAlgthm[i][7], AllAlgthm[i][8], AllAlgthm[i][9], AllAlgthm[i][10],AllAlgthm[i][11], AllAlgthm[i][12], AllAlgthm[i][13], AllAlgthm[i][14], AllAlgthm[i][15], AllAlgthm[i][16], AllAlgthm[i][17])
     
-
 
 
 
