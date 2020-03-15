@@ -4,6 +4,9 @@ import csv
 
 csvFile = open("outputCSV.csv","w")
 txt = open("output.txt","w+")
+txtLog = open("Log.txt", "w+")
+txtSumm = open("Summary_Output.txt", "w+")
+
 write_outfile = csv.writer(csvFile)
 
 def ValidateInputLine(fileinput):
@@ -354,7 +357,136 @@ def DeAllocation(myMemory, total_mem, blckSize, Jobs_InProgress):
                     myMemory.entireMem[block][cell] = ''
 
 
+def FindLrgFreeSpace(allMem):
 
+    loc =0 
+    size =0 
+    
+    temp_loc =0
+    global Memory_IsFull
+    
+    WorseFit = [loc, size]
+
+    cnt_block =0
+
+    temp_loc =0
+    found = False
+
+    while loc < len(allMem.entireMem):
+
+        
+        if allMem.entireMem[loc][0] =='':
+            temp_loc  =loc
+        
+            while allMem.entireMem[temp_loc][0] == '' and  temp_loc != len(allMem.entireMem)-1 :
+      
+                cnt_block +=1 
+                temp_loc +=1
+                
+            if cnt_block > WorseFit[1] :
+                
+                found = True
+                WorseFit[0] = loc
+                WorseFit[1] = cnt_block
+                              
+            cnt_block =0
+            loc  = temp_loc
+        
+        loc+=1 
+    
+    if found  == False: 
+        Memory_IsFull = True
+           
+    return WorseFit[1]
+
+
+def FindSmallFreeSpace(allMem):
+
+    loc =0 
+    size =1000000 
+    
+    temp_loc =0
+    global Memory_IsFull
+    
+    WorseFit = [loc, size]
+
+    cnt_block =0
+
+    temp_loc =0
+    found = False
+    
+    while loc < len(allMem.entireMem):
+
+        
+        if allMem.entireMem[loc][0] =='':
+            temp_loc  =loc
+        
+            while allMem.entireMem[temp_loc][0] == '' and  temp_loc != len(allMem.entireMem)-1 :
+      
+                cnt_block +=1 
+                temp_loc +=1
+                
+            if cnt_block < WorseFit[1] :
+                
+                found = True
+                WorseFit[0] = loc
+                WorseFit[1] = cnt_block
+                              
+            cnt_block =0
+            loc  = temp_loc
+        
+        loc+=1 
+    
+    if found  == False: 
+        Memory_IsFull = True
+           
+    return WorseFit[1]
+
+def printMetrics(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r):
+    txtSumm.write("----------------------------------------------------------")
+    txtSumm.write("\n% Memory in Use: " + str(a))
+    txtSumm.write("\n% Memory Free: " + str (round(b, 2)))
+    txtSumm.write("\n% Internal Fragmentation: " + str(c))
+    txtSumm.write("\n% External Fragmentation: " + str(d))
+    txtSumm.write("\nLargest Free Space: " + str(e))
+    txtSumm.write("\nSmallest Free Space: " + str(f))
+    txtSumm.write("\nNumbr of Lost Objects:" + str(g))
+    txtSumm.write("\nTotal memory size of lost objects: " + str(h))
+    txtSumm.write("\n% Memory of lost objects: " + str(i))
+    txtSumm.write("\nNumber of Allocation: " + str(j))
+    txtSumm.write("\nNumbr of Operations: " +str(k))
+    txtSumm.write("\nAvg Numb of Alloc Operations: " + str(l ))
+    txtSumm.write("\nNumber of Free Requests: " +str(m))
+    txtSumm.write("\nNumber of Free Operations: " + str(n))
+    txtSumm.write("\nFour Additional Memory Metrics: ")
+    txtSumm.write("\n------------------------------------------------------")
+    txtSumm.write("\nAverage Number of Heap Elements Leaving: " + str(o))
+    txtSumm.write("\nAvg % of Heap Elements in Memory: " + str(p))
+    txtSumm.write("\n% of Time Memory is Below 50 % Usage: "+ str(q) )
+    txtSumm.write("\n% of Time Memory is Above 50% Usage: " + str(r))
+    txtSumm.write("\n\n")
+    
+    print("% Memory in Use: " + str(a))
+    print("% Memory Free: " + str (round(b, 2)))
+    print("% Internal Fragmentation: " + str(c))
+    print("% External Fragmentation: " + str(d))
+    print("Largest Free Space: " + str(e))
+    print("Smallest Free Space: " + str(f))
+    print("Numbr of Lost Objects:" + str(g))
+    print("Total memory size of lost objects: " + str(h))
+    print("% Memory of lost objects: " + str(i))
+    print("Number of Allocation: " + str(j))
+    print("Numbr of Operations: " +str(k))
+    print("Avg Numb of Alloc Operations: " + str(l ))
+    print("Number of Free Requests: " +str(m))
+    print("Number of Free Operations: " + str(n))
+    print("Four Additional Memory Metrics: ")
+    print("------------------------------------------------------")
+    print("Average Number of Heap Elements Leaving: " + str(o))
+    print("Avg % of Heap Elements in Memory: " + str(p))
+    print("% of Time Memory is Below 50 % Usage: "+ str(q) )
+    print("% of Time Memory is Above 50% Usage: " + str(r))
+    print("\n")
 # =============================================================================================
 #                   MAIN ()- Random Job Generation
 #                       -User Input for percentages of small, medium, Large
@@ -362,7 +494,6 @@ def DeAllocation(myMemory, total_mem, blckSize, Jobs_InProgress):
 #                       -Option for losted objects
 #                       -MEMORY ALLOCATION, DEALLOCATION
 # =============================================================================================
-
 
 JobHolder = []
 
@@ -389,8 +520,7 @@ heapType = 0
 
 heap_alloc = 0
 
-TotNumJobs = 50 
-
+TotNumJobs = 2400 
 
 # =========================================================================================
 
@@ -420,7 +550,19 @@ number_sml_jobs =  TotNumJobs * (int(sml_job) / 100)
 number_med_jobs = TotNumJobs * (int(med_job) / 100)
 number_lrg_jobs = TotNumJobs * (int(lrg_job) / 100)
 
-while time < TotNumJobs:
+temp_sml_jobs =number_sml_jobs
+temp_med_jobs =number_med_jobs
+temp_lrg_jobs =number_lrg_jobs
+
+txtSumm.write("\n-------------------------------------------------------------")
+txtSumm.write("\nMemory Management Metrics")    
+txtSumm.write("\n-------------------------------------------------------------")
+txtSumm.write("\nNumber of Small Jobs: " + str(temp_sml_jobs)+ " " +str(sml_job) + "%")
+txtSumm.write("\nNumber of Medium Jobs: "+ str(temp_med_jobs) + " " +str(sml_job) + "%")
+txtSumm.write("\nNumber of Large Jobs: "+ str(temp_lrg_jobs) + " " +str(sml_job) + "%")
+txtSumm.write("\n")
+
+while time < 12000:
  
    if time % 5 == 1:
        
@@ -506,237 +648,484 @@ while (True):
     print("Please type in a valid key entry! y or n")
 
 print('\n')
-# =========================================================================================
-    
- # ZAID- WILL NEED TO UPDATE THIS WITH YOUR CODE     
-# ASK THE USER TO ENTER IF THEY WOULD LIKE TO SIMULATE LOSTED OBJECTS
-    
-# =========================================================================================
 
-while (True):
-    althm = input("CHOOSE WHICH ALGORITHM:\n 1-FIRST FIT \n 2-NEXT FIT \n 3-BEST FIT \n 4-WORSE FIT")
-    althm = int(althm) 
-    
-    if(althm > 0 and althm < 5 ):
-        break
 
+#=========================================================================================
+#               METRIC VARIABLES 
+#=========================================================================================
+althm =1 
+AllAlgthm =[]
+timeRunningFor = 50
 TotalSizeMem = total_mem * memory_unit_sz
 totMemAlloc = 0
-PrcntMemUse = []
+memAlloc =0
+PrcntMemUse = 0
+FreeMem = 0 
+Prcnt_FreeMem = 0
+
+Num_LostObj =0
+Tot_MemLostObj =0
+Percnt_LostObj =0
+
+Num_Alloc=0
+Num_AllocOp =0
+tempOp =0
+Tot_AllocOp =0
+Avg_AllocOp=0
+
+IntrnalFrag = 0
+PercntIntrnalFrag = 0
+
+ExtrnalFrag =0
+PercntExtFrag =0
+
+NumFreeReq =0
+NumFreeOp =0
+
+HeapEleLeaving=0
+HeapLeavAll =0
+
+cntHeapMem=0
+HeapMemAll =0
+
+cntLess20Mem= 0
+isLess20Mem= 0
+Less20MemAll =0
+
+cntGreater70=0
+isGreater70Mem= 0
+Greater70MemAll =0
+
+lrgFree = 0
+smllFree =0
+
+Avg_PrcntMemUse =0
+Avg_PrcntFreeMem =0
+Avg_PrcntIntFrag =0 
+Avg_PrcntExtFrag =0 
+Avg_HeapLeaving =0
+Avg_HeapMemUsage =0
+Prcnt_20=0
+Prcnt_70 =0
+
+txtSumm.write("\nTotal Memory Defined: " + str(TotalSizeMem))
+txtSumm.write("\nAmount of Memory Allocated: " + str(memAlloc) + "\n")
+
+Percnt_LostObj =  (Tot_MemLostObj / TotalSizeMem) * 100
+#=========================================================================================
+temp1 =0
 myMemoryUnit = Memory_Entire_Unit(memory_unit_sz, total_mem)
 
 rand_job_input_file = open("output.txt", "r")
 jobRequest = ""
 
-while cur_time < 100:
+while althm < 5:
     
-    holdJob = (peek_line(rand_job_input_file))
-    holdJob = holdJob.split()
     
-    if not holdJob ==[]:
+    if althm == 1:
+        txtSumm.write("\n====================================================" )
+        txtSumm.write("\nFIRST FIT:" )
+        txtSumm.write("\n====================================================" )
+        txtLog.write("\n====================================================" )
+        txtLog.write("\nFIRST FIT:" )
+        txtLog.write("\n====================================================" )
+    elif althm == 2:
+        txtSumm.write("\n====================================================" )
+        txtSumm.write("\nBEST FIT:" )
+        txtSumm.write("\n====================================================" )
+        txtLog.write("\n====================================================" )
+        txtLog.write("\nBEST FIT:" )
+        txtLog.write("\n====================================================" )
+    elif althm == 3:
+        txtSumm.write("\n====================================================" )
+        txtSumm.write("\nNEXT FIT:" )
+        txtSumm.write("\n====================================================" )
+        txtLog.write("\n====================================================" )
+        txtLog.write("\nNEXT FIT:" )
+        txtLog.write("\n====================================================" )
+    elif althm ==4 :
+        txtSumm.write("\n====================================================" )
+        txtSumm.write("\nWORSE FIT:" )
+        txtSumm.write("\n====================================================" )
+        txtLog.write("\n====================================================" )
+        txtLog.write("\nWORSE FIT:" )
+        txtLog.write("\n====================================================" )
+    
+    while cur_time < timeRunningFor:
+        
+        txtSumm.write("\n\nTime: " + str(cur_time))
+        txtLog.write("\n\nTime: " + str(cur_time))
+        print("Time: " + str(cur_time))
+        holdJob = (peek_line(rand_job_input_file))
+        holdJob = holdJob.split()
+        
+        if not holdJob ==[]:
+              
+            if int(holdJob[1]) == int(cur_time):
+                
+                jobRequest = rand_job_input_file.readline()
+                
+                if not ValidateInputLine(jobRequest):
+                    print("Error Job has been Rejected due to job formatent!")
+                else:
+                    JobHolder.append(ValidateInputLine(jobRequest))
+                
+        
+        # CHECKS ALL THE JOBS IN JOB HOLDER LIST
+        for cur_job in range(len(JobHolder)):
+            
+            # CHECK IF JOBS HAS ARRIVED TO THE MEMORY
+            if cur_time == JobHolder[cur_job][1]:  
+                txtSumm.write("\n\tJOB " + str(JobHolder[cur_job][0]) + " ARRIVES")
+                # create the heap elements
+                
+                for heap in range(JobHolder[cur_job][6]):       
+                    
+                    heapRunTime = random.randint(1, JobHolder[cur_job][3])
+                    heapType = JobHolder[cur_job][2]
+                    heapSize = random.randint(20, 50)
+                    heapJob = JobHolder[cur_job][0]
+    
+                    JobHeapList.append([heapJob, heap + 1 , JobHolder[cur_job][2], heapRunTime, heapSize, "NA"])
+    
+                #ALLOCATE CODE PORTION
+                if althm == 1:    
+                    start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)
+                    
+                elif althm == 2: 
+                    start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4)
+                    
+                elif althm == 3:
+                    start_loc = NFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4, start_loc)
+                    
+                elif althm == 4:     
+                    start_loc = WFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4)
+    
+                if Memory_IsFull == False:
+                    Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 4)
+                    Num_Alloc +=1
+                    Num_AllocOp +=1
+                    totMemAlloc += JobHolder[cur_job][4]
+                    memAlloc +=JobHolder[cur_job][4]
+                    txtLog.write("\n\tJOB " + str(JobHolder[cur_job][0]) + " HAS BEEN ALLOCATED")
+                    txtLog.write("\n\tLOCATION: " + str(start_loc))
+                   
+                    if JobHolder[cur_job][4] % memory_unit_sz !=0:
+                        temp1 = abs( math.ceil(JobHolder[cur_job][4] / memory_unit_sz) - JobHolder[cur_job][4])
+                        
+                        IntrnalFrag += temp1 
+                    Jobs_InProgress.append(JobHolder[cur_job])
+    
+                #ALLOCATE STACK PORTION
+                if althm == 1:    
+                    start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,5)
+                    
+                elif althm == 2: 
+                    start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5)
+                    
+                elif althm == 3:
+                    start_loc = NFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5, start_loc)
+                    
+                elif althm == 4:     
+                    start_loc = WFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5)
+    
+                if Memory_IsFull == False:
+                    
+                    Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
+                    Num_Alloc +=1 
+                    Num_AllocOp +=1
+                    Jobs_InProgress.append(JobHolder[cur_job])
+                    memAlloc +=JobHolder[cur_job][5]
+                    totMemAlloc += JobHolder[cur_job][5]
+                    
+                    if JobHolder[cur_job][4] % memory_unit_sz !=0:
+                        temp1 = abs(math.ceil(JobHolder[cur_job][4] / memory_unit_sz) - JobHolder[cur_job][4])
+                            
+                        IntrnalFrag += temp1
+    
+    #=====================================================================================================
+    
+    # ALLOCATES THE HEAP ELEMENTS INTO THE MEMORY - SMALL, MEDIUM, LARGE
+    
+    #=====================================================================================================
+    
+        if Memory_IsFull == True:
+            txtLog.write("\n\tMEMORY IS EITHER FULL, TOO SMALL, OR CANNOT ALLOCATE ANYMORE JOBS! ")
+            txtSumm.write("\n\tMEMORY IS EITHER FULL, TOO SMALL, OR CANNOT ALLOCATE ANYMORE JOBS! ")
+            break
+        
+        if len(JobHeapList) != 0 and Memory_IsFull == False:
+    
+            if JobHeapList[0][2] == "Small":
+    
+                while heap_alloc < 50 and len(JobHeapList) != 0:
+    
+                    start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz,4)
+    
+                    if Memory_IsFull == False:
+    
+                        Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
+                        txtLog.write("\n\tJOB " + str(JobHeapList[0][0]) + " HEAP ELEMENT " + str(JobHeapList[0][1]) + " HAS ALLOCATED")
+                        Jobs_InProgress.append(JobHeapList[0])
+                        Num_Alloc +=1
+                        Num_AllocOp +=1
+                        memAlloc +=JobHeapList[0][4]
+                        totMemAlloc += JobHeapList[0][4]
+                        cntHeapMem += JobHeapList[0][4]
+                        if JobHeapList[0][4] % memory_unit_sz !=0:
+                            temp1 = abs(math.ceil(JobHeapList[0][4] / memory_unit_sz) - JobHeapList[0][4])
+                                
+                            IntrnalFrag += temp1
+                        JobHeapList.pop(0)
+    
+                    elif Memory_IsFull == True:
+                        break
+    
+                    heap_alloc +=1
+    
+    
+            elif JobHeapList[0][2] == "Medium" :
+    
+                while  heap_alloc < 100 and len(JobHeapList) != 0:
+    
+                    start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
+    
+                    if Memory_IsFull == False:
+    
+                        Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
+                        Jobs_InProgress.append(JobHeapList[0])
+                        Num_Alloc +=1
+                        Num_AllocOp +=1
+                        memAlloc +=JobHeapList[0][4]
+                        totMemAlloc += JobHeapList[0][4]
+                        cntHeapMem += JobHeapList[0][4]
+                        txtLog.write("\n\tJOB " + str(JobHeapList[0][0]) + " HEAP ELEMENT " + str(JobHeapList[0][1]) + " HAS ALLOCATED")
+                        
+                        if JobHolder[cur_job][4] % memory_unit_sz !=0:
+                            temp1 = abs(math.ceil(JobHeapList[0][4] / memory_unit_sz) - JobHeapList[0][4])
+                            IntrnalFrag += temp1
+                            
+                        JobHeapList.pop(0)
+    
+                    elif Memory_IsFull == True:
+    
+                        break
+    
+                    heap_alloc +=1
+    
+            elif JobHeapList[0][2] =="Large":
+    
+                while heap_alloc < 250 and len(JobHeapList) !=0:
+    
+                    start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
+    
+                    if Memory_IsFull == False:
+    
+                        Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
+                        txtLog.write("\n\tJOB " + str(JobHeapList[cur_job][0]) + " HEAP ELEMENT " + str(JobHeapList[cur_job][1]) + " HAS ALLOCATED")
+                        Jobs_InProgress.append(JobHeapList[0])
+                        Num_Alloc +=1
+                        Num_AllocOp +=1
+                        memAlloc +=JobHeapList[0][4]
+                        totMemAlloc += JobHeapList[0][4]
+                        cntHeapMem -= Jobs_InProgress[job][4]
+                        
+                        if JobHolder[cur_job][4] % memory_unit_sz !=0:
+                            temp1 = abs(math.ceil(JobHolder[cur_job][4] / memory_unit_sz) - JobHolder[cur_job][4])
+                                
+                            IntrnalFrag += temp1
+                        JobHeapList.pop(0)
+    
+                    elif Memory_IsFull == True:
+    
+                        break 
+    
+                    heap_alloc +=1
           
-        if int(holdJob[1]) == int(cur_time):
-            
-            jobRequest = rand_job_input_file.readline()
-            
-            if not ValidateInputLine(jobRequest):
-                print("Error Job has been Rejected due to job formatent!")
-            else:
-                JobHolder.append(ValidateInputLine(jobRequest))
-            
-     
-   
     
-    # CHECKS ALL THE JOBS IN JOB HOLDER LIST
-    for cur_job in range(len(JobHolder)):
+        heap_alloc = 0
+    
         
-        # CHECK IF JOBS HAS ARRIVED TO THE MEMORY
-        if cur_time == JobHolder[cur_job][1]:  
-            
-            # create the heap elements
-            for heap in range(JobHolder[cur_job][6]):       
-                
-                heapRunTime = random.randint(1, JobHolder[cur_job][3])
-                heapType = JobHolder[cur_job][2]
-                heapSize = random.randint(20, 50)
-                heapJob = JobHolder[cur_job][0]
-
-                JobHeapList.append([heapJob, "NA", JobHolder[cur_job][2], heapRunTime, heapSize])
-
-            #ALLOCATE CODE PORTION
-            if althm == 1:    
-                start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,4)
-                
-            elif althm == 2: 
-                start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4)
-                
-            elif althm == 3:
-                start_loc = NFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4, start_loc)
-                
-            elif althm == 4:     
-                start_loc = WFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 4)
-
-            if Memory_IsFull == False:
-                Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 4)
-                totMemAlloc += JobHolder[cur_job][4]
-                Jobs_InProgress.append(JobHolder[cur_job])
-
-            #ALLOCATE STACK PORTION
-            if althm == 1:    
-                start_loc = FFalloc(myMemoryUnit,JobHolder[cur_job], memory_unit_sz,5)
-                
-            elif althm == 2: 
-                start_loc = BFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5)
-                
-            elif althm == 3:
-                start_loc = NFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5, start_loc)
-                
-            elif althm == 4:     
-                start_loc = WFalloc(myMemoryUnit, JobHolder[cur_job], memory_unit_sz, 5)
-
-            if Memory_IsFull == False:
-                
-                Allocation(myMemoryUnit, JobHolder[cur_job], start_loc, memory_unit_sz, 5)
-                Jobs_InProgress.append(JobHolder[cur_job])
-                totMemAlloc += JobHolder[cur_job][5]
-            
-
-#=====================================================================================================
-
-# ALLOCATES THE HEAP ELEMENTS INTO THE MEMORY - SMALL, MEDIUM, LARGE
-
-#=====================================================================================================
-
-    if Memory_IsFull == True:
-        print("MEMORY IS EITHER FULL, TOO SMALL, OR CANNOT ALLOCATE ANYMORE JOBS! ")
-        break
+        #DEALLOCATES JOBS ONCE RUNTIME IS DONE==========================
+        lenProgress = len(Jobs_InProgress)
     
-    if len(JobHeapList) != 0 and Memory_IsFull == False:
-
-        if JobHeapList[0][2] == "Small":
-
-            while heap_alloc < 50 and len(JobHeapList) != 0:
-
-                start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz,4)
-
-                if Memory_IsFull == False:
-
-                    Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])    
-                    totMemAlloc += JobHolder[cur_job][5]
-                    JobHeapList.pop(0)
-
-                elif Memory_IsFull == True:
-                    break
-
-                heap_alloc +=1
-
-
-        elif JobHeapList[0][2] == "Medium" :
-
-            while  heap_alloc < 100 and len(JobHeapList) != 0:
-
-                start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
-
-                if Memory_IsFull == False:
-
-                    Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])
-                    totMemAlloc += JobHolder[cur_job][5]
-                    JobHeapList.pop(0)
-
-                elif Memory_IsFull == True:
-
-                    break
-
-                heap_alloc +=1
-
-        elif JobHeapList[0][2] =="Large":
-
-            while heap_alloc < 250 and len(JobHeapList) !=0:
-
-                start_loc = FFalloc(myMemoryUnit, JobHeapList[0], memory_unit_sz, 4)
-
-                if Memory_IsFull == False:
-
-                    Allocation(myMemoryUnit, JobHeapList[0], start_loc, memory_unit_sz, 4)
-                    Jobs_InProgress.append(JobHeapList[0])
-                    totMemAlloc += JobHolder[cur_job][5]
-                    JobHeapList.pop(0)
-
-                elif Memory_IsFull == True:
-
-                    break 
-
-                heap_alloc +=1
-      
-
-    heap_alloc = 0
-
-    print("Time: " + str(cur_time))
-    #print("My Memory Contents After Allocation: ")
-    #printMemory(myMemoryUnit.entireMem, myMemoryUnit, memory_unit_sz)
-
-    #DEALLOCATES JOBS ONCE RUNTIME IS DONE==========================
-    lenProgress = len(Jobs_InProgress)
-
-    while job < lenProgress:
-
-        if int(Jobs_InProgress[job][3]) <= 1 and Jobs_InProgress[job][0] % 100 !=0  and option_lost_obj == "y":
-            DeAllocation(myMemoryUnit, total_mem, memory_unit_sz, Jobs_InProgress[job])
-            lenProgress -= 1
+        while job < lenProgress:
+    
+            if int(Jobs_InProgress[job][3]) <= 1:
+                NumFreeReq +=1
+                txtSumm.write("\n\tJOB " + str(Jobs_InProgress[job][0]) + " DEPARTS")
+                
+                if option_lost_obj == "y":
+                    
+                    if Jobs_InProgress[job][0] % 100 !=0:
+                    
+                        DeAllocation(myMemoryUnit, total_mem, memory_unit_sz, Jobs_InProgress[job])
+                        Num_AllocOp +=1
+                        lenProgress -= 1
+                        
+                        
+                        if Jobs_InProgress[job][5] =="NA":
+                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[cur_job][1]) + " HAS DEALLOCATED")
+                            NumFreeOp +=1 
+                            totMemAlloc -= Jobs_InProgress[job][4]
+                            cntHeapMem -= Jobs_InProgress[job][4]
+                            HeapEleLeaving+=1
+                            
+    
+                        else:
+                            txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HAS DEALLOCATED")
+                            NumFreeOp +=2
+                            totMemAlloc -=Jobs_InProgress[job][5]
+                            totMemAlloc -= Jobs_InProgress[job][4]
+                            
+                    
+                        Jobs_InProgress.pop(job)
+                        job -= 1
+                        
+                    elif Jobs_InProgress[job][0] % 100 ==0 and len(Jobs_InProgress[job])==7:
+                        Num_LostObj +=1
+                        Tot_MemLostObj += Jobs_InProgress[job][4] + Jobs_InProgress[job][5] 
+                        
+                elif option_lost_obj == "n":
+                    DeAllocation(myMemoryUnit, total_mem, memory_unit_sz, Jobs_InProgress[job])
+                    Num_AllocOp +=1
+                    lenProgress -= 1
+                        
+                    if Jobs_InProgress[job][5] =="NA":
+                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HEAP ELEMENT " + str(Jobs_InProgress[cur_job][1]) + " HAS DEALLOCATED")
+                        NumFreeOp +=1 
+                        totMemAlloc -= Jobs_InProgress[job][4]
+                        HeapEleLeaving+=1
+                        cntHeapMem -= JobHeapList[job][4]
+                            
+                    else: 
+                        NumFreeOp +=2
+                        txtLog.write("\n\tJOB " + str(Jobs_InProgress[cur_job][0]) + " HAS DEALLOCATED")
+                        totMemAlloc -= Jobs_InProgress[job][4]
+                        totMemAlloc -= Jobs_InProgress[job][5]
+                        
+                    Jobs_InProgress.pop(job)
+                    job -= 1
+                    
+            job += 1
+    
+        job = 0
+        # DECREMENT THE REMAINING TIME FOR THE JOB WHEN ITS MEMORY==========================
+        for cnt in range(len(Jobs_InProgress)):
+            Jobs_InProgress[cnt][3] -= 1
+    #========================================================================================  
+            
+        # METRIC CALCULATIONS
         
-            Jobs_InProgress.pop(job)
-            job -= 1
-
-        job += 1
-
-    job = 0
-
-    # DECREMENT THE REMAINING TIME FOR THE JOB WHEN ITS MEMORY==========================
-    for cnt in range(len(Jobs_InProgress)):
-        Jobs_InProgress[cnt][3] -= 1
-
-    PrcntMemUse.append(totMemAlloc / TotalSizeMem )
+    #========================================================================================
+        
+        if totMemAlloc > TotalSizeMem:
+            totMemAlloc = TotalSizeMem
+            
+        if totMemAlloc < 0:
+            totMemAlloc = 0
+        
+        FreeMem = TotalSizeMem - totMemAlloc
+        Prcnt_FreeMem = round((FreeMem / TotalSizeMem) * 100, 2)
+        
+        PrcntMemUse = round((totMemAlloc / TotalSizeMem ) * 100, 2)
+        
+        for i in range(len(myMemoryUnit.entireMem)):
+            if myMemoryUnit.entireMem[i][0]=='':
+                ExtrnalFrag +=1
+            
+            if myMemoryUnit.entireMem[i][0] !='':
+                cntLess20Mem +=1
+                cntGreater70 +=1
+         
+        if (cntLess20Mem / total_mem ) * 100 < 50 :
+            isLess20Mem = "yes"
+            
+        if (cntGreater70 / total_mem ) * 100 > 50 :
+            isGreater70Mem  = "yes"
+        
     
-    cur_time += 1
-
-
-temp=0
-for i in range(len(PrcntMemUse)):
-    temp+= PrcntMemUse[i]
+        PercntExtFrag = round((ExtrnalFrag / TotalSizeMem) * 100, 2)
+        PercntIntrnalFrag = round((IntrnalFrag / TotalSizeMem ) * 100, 2 )
     
-temp = temp / len(PrcntMemUse)
+        
+        Percnt_LostObj = round( (Tot_MemLostObj / TotalSizeMem) * 100, 2)
+        lrgFree= FindLrgFreeSpace(myMemoryUnit)
+        smllFree= FindSmallFreeSpace(myMemoryUnit)
+        
+        if cur_time ==0:
+            
+            Avg_AllocOp = Num_Alloc / 1
+        else:
+            Avg_AllocOp = Num_Alloc / cur_time
+        
+        HeapMemAll = round ((abs(cntHeapMem / TotalSizeMem)) * 100 ,2 )
+        
+    
+        if cur_time % 20 == 0: #and cur_time >=2000:
+            txtSumm.write("\n\n")
+            txtSumm.write("\n% Memory in Use: " + str(PrcntMemUse))
+            txtSumm.write("\n% Memory Free: " + str (round(Prcnt_FreeMem, 2)))
+            txtSumm.write("\n% Internal Fragmentation: " + str(PercntIntrnalFrag))
+            txtSumm.write("\n% External Fragmentation: " + str(PercntExtFrag))
+            txtSumm.write("\nLargest Free Space: " + str(lrgFree))
+            txtSumm.write("\nSmallest Free Space: " + str(smllFree))
+            txtSumm.write("\nNumbr of Lost Objects:" + str(Num_LostObj))
+            txtSumm.write("\nTotal memory size of lost objects: " + str(Tot_MemLostObj))
+            txtSumm.write("\n% Memory of lost objects: " + str(Percnt_LostObj))
+            txtSumm.write("\nNumber of Allocation: " + str(Num_Alloc))
+            txtSumm.write("\nNumbr of Operations: " +str(Num_AllocOp))
+            txtSumm.write("\nAvg Numb of Alloc Operations: " + str(Avg_AllocOp ))
+            txtSumm.write("\nNumber of Free Requests: " +str(NumFreeOp))
+            txtSumm.write("\nNumber of Free Operations: " + str(NumFreeReq))
+            txtSumm.write("\nFour Additional Memory Metrics: ")
+            txtSumm.write("\n------------------------------------------------------")
+            txtSumm.write("\nAverage Number of Heap Elements Leaving: " + str(HeapEleLeaving))
+            txtSumm.write("\nAvg % of Heap Elements in Memory: " + str(HeapMemAll))
+            txtSumm.write("\n% of Time Memory is Below 50 % Usage: "+ str(isLess20Mem) )
+            txtSumm.write("\n% of Time Memory is Above 50% Usage: " + str(isGreater70Mem ))
+            txtSumm.write("\n")
+        
+        if cur_time >= timeRunningFor -2:
+            AllAlgthm.append([PrcntMemUse, Prcnt_FreeMem, PercntIntrnalFrag, PercntExtFrag, lrgFree, smllFree, Num_LostObj,Tot_MemLostObj, Percnt_LostObj,Num_Alloc, Num_AllocOp, Avg_AllocOp, NumFreeOp,NumFreeReq, HeapEleLeaving, HeapMemAll, isLess20Mem,isGreater70Mem])
+            
+        ExtrnalFrag =0    
+        IntrnalFrag=0
+        cntGreater70 =0
+        cntLess20Mem =0    
+        cntHeapMem =0 
+        isLess20Mem = "no"
+        isGreater70Mem  = "no"
+        
+        cur_time += 1
+    
+    cur_time =0
+    JobHolder =[] 
+    JobHeapList =[]
+    Jobs_InProgress =[]
+    
+    althm +=1
+
+
+txtSumm.write("\nFINAL SUMMARY" )
+for i in range(len(AllAlgthm)):
+    
+    if i == 0:
+        txtSumm.write("\n\nAlgorithm: First Fit" )
+        print("\nAlgorithm: First Fit" )
+    elif i == 1:
+        txtSumm.write("\n\nAlgorithm: Next Fit" )
+        print("\nAlgorithm: First Fit" )
+    elif i == 2:
+        txtSumm.write("\n\nAlgorithm: Best Fit" )
+        print("\nAlgorithm: First Fit" )
+    elif i ==3:
+        txtSumm.write("\n\nAlgorithm: Worse Fit" )
+        print("\nAlgorithm: First Fit" )
+    
+    printMetrics(AllAlgthm[i][0],AllAlgthm[i][1], AllAlgthm[i][2], AllAlgthm[i][3], AllAlgthm[i][4], AllAlgthm[i][5], AllAlgthm[i][6], AllAlgthm[i][7], AllAlgthm[i][8], AllAlgthm[i][9], AllAlgthm[i][10],AllAlgthm[i][11], AllAlgthm[i][12], AllAlgthm[i][13], AllAlgthm[i][14], AllAlgthm[i][15], AllAlgthm[i][16], AllAlgthm[i][17])
     
 
 
-PrcntMemAlloc = (totMemAlloc / TotalSizeMem) *100
-print("-------------------------------------------------------------")
-print("Memory Management Metrics")    
-print("-------------------------------------------------------------")
-print("Number of Small Jobs: " + str(number_sml_jobs))
-print("Number of Medium Jobs: "+ str(number_med_jobs))
-print("Number of Large Jobs: "+ str(number_lrg_jobs))
-print("\n")
 
-print("Total Memory Defined: " + str(TotalSizeMem))
-print("Amount of Memory Allocated: " + str(totMemAlloc))
-print("% Memory in Use: " + str(temp))
-print("% Internal Fragmentation: ")
-print("% Memory Free: " )
-print("% External Fragmentation: ")
-print("Largest Free Space: ")
-print("Smallest Free Space: ")
-print("\n")
 
-print("Numbr of Lost Objects:")
-print("Total memory size of lost objects: ")
-print("%Memory  of lost objects: ")
-print("\n")
-
-print("Number of Allocation: ")
-print("Numbr of Allocation Operations: ")
-print("Avg Numb of Alloc Operations: ")
-print("Number of Free Requests: ")
-print("Number of Free Operations: ")
-print("Avg Numbr of alloc operations: ")
